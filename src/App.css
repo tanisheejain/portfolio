@@ -1,0 +1,58 @@
+/* Custom styles for the vintage Mac aesthetic */
+
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #000000;
+  color: #ffffff;
+}
+
+/* Pixel perfect rendering */
+* {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Ensure crisp borders */
+.border-2, .border-4 {
+  border-style: solid;
+}
+
+/* Custom pixel bounce animation */
+@keyframes pixelBounce {
+  0% { 
+    transform: scale(1);
+  }
+  50% { 
+    transform: scale(0.95);
+  }
+  100% { 
+    transform: scale(1);
+  }
+}
+
+.animate-pixel-bounce {
+  animation: pixelBounce 0.1s ease-in-out;
+}
+
+/* Hover effects for dock icons */
+.dock-icon:hover {
+  filter: invert(1);
+  transition: filter 0.1s ease-in-out;
+}
+
+/* Pixel font fallbacks */
+.font-pixel {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+}
+
+/* Ensure no anti-aliasing */
+* {
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: auto;
+  text-rendering: optimizeSpeed;
+}
