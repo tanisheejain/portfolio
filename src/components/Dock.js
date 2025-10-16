@@ -79,7 +79,7 @@ const Dock = () => {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black border-t-2 border-white">
       <div className="flex justify-center items-center py-4 px-4">
-        <div className="flex space-x-2 bg-gray-900 p-3 rounded-lg border-2 border-white">
+        <div className="flex space-x-2 bg-black p-3 rounded-lg border-2 border-white">
           {icons.map((icon) => (
             <div key={icon.type} className="relative group">
               <PixelIcon

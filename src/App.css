@@ -39,7 +39,7 @@
 
 /* Hover effects for dock icons */
 .dock-icon:hover {
-  filter: invert(1);
+  filter: brightness(0.8);
   transition: filter 0.1s ease-in-out;
 }
 

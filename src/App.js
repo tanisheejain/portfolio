@@ -18,10 +18,10 @@ function App() {
               </div>
             </div>
           </div>
-          <p className="text-sm text-gray-400 tracking-wide">
+          <p className="text-sm text-white tracking-wide">
             VINTAGE MAC STYLE
           </p>
-          <p className="text-xs text-gray-500 mt-2 tracking-widest">
+          <p className="text-xs text-white mt-2 tracking-widest">
             CLICK DOCK ICONS TO EXPLORE
           </p>
         </div>
