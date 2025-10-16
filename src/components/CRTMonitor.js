@@ -4,6 +4,7 @@ const CRTMonitor = ({ project, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [showText, setShowText] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
 
   const playStaticSound = () => {
@@ -29,14 +30,56 @@ const CRTMonitor = ({ project, index }) => {
     }
   };
 
+  const playClickSound = () => {
+    try {
+      const audio = new Audio('/sounds/click.wav');
+      audio.volume = 0.3;
+      audio.play().catch(e => console.log('Click sound not available:', e));
+    } catch (e) {
+      console.log('Click sound not available:', e);
+    }
+  };
+
+  const playStartupHum = () => {
+    try {
+      const audio = new Audio('/sounds/startup_hum.wav');
+      audio.volume = 0.2;
+      audio.play().catch(e => console.log('Startup hum not available:', e));
+    } catch (e) {
+      console.log('Startup hum not available:', e);
+    }
+  };
+
   const handleClick = () => {
+    // 1. Immediately open a blank new tab (to avoid pop-up blockers)
+    const newTab = window.open('', '_blank');
+    
+    // 2. Set states for animation
     setIsClicked(true);
     setShowText(true);
     
-    // Typewriter effect delay
+    // 3. Play click sound immediately
+    playClickSound();
+    
+    // 4. After typewriter text finishes (~2s), show white overlay and play startup hum
     setTimeout(() => {
-      window.open(project.figmaLink, '_blank');
-    }, 2000);
+      setShowOverlay(true);
+      playStartupHum();
+      
+      // 5. After overlay animation completes (~0.4s), navigate to project href
+      setTimeout(() => {
+        if (newTab) {
+          newTab.location.href = project.href;
+        }
+        
+        // Reset states after navigation
+        setTimeout(() => {
+          setShowOverlay(false);
+          setShowText(false);
+          setIsClicked(false);
+        }, 100);
+      }, 400); // 0.4s for overlay animation
+    }, 2000); // 2s for typewriter text
   };
 
   const handleMouseEnter = () => {
@@ -48,6 +91,7 @@ const CRTMonitor = ({ project, index }) => {
     setIsHovered(false);
     setShowText(false);
     setIsClicked(false);
+    setShowOverlay(false);
   };
 
   return (
@@ -98,6 +142,11 @@ const CRTMonitor = ({ project, index }) => {
               </div>
             </div>
           </div>
+        )}
+
+        {/* White Overlay for Screen Brightening */}
+        {showOverlay && (
+          <div className="absolute inset-0 bg-white bg-opacity-20 animate-white-overlay"></div>
         )}
       </div>
 

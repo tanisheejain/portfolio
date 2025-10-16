@@ -7,22 +7,22 @@ const Homepage = () => {
     {
       name: 'Nami',
       image: '/projects/nami.png',
-      figmaLink: 'https://www.figma.com/design/your-nami-project'
+      href: 'https://drive.google.com/file/d/1UVI7kN4oDeVfGonKaQKw52GDW6Gw6OdS/view?usp=share_link'
     },
     {
       name: 'गली LABS',
       image: '/projects/gullylabs.png',
-      figmaLink: 'https://www.figma.com/design/your-gully-project'
+      href: 'https://www.figma.com/design/your-gully-project'
     },
     {
       name: 'BLUORNƏ',
       image: '/projects/bluorng.png',
-      figmaLink: 'https://www.figma.com/design/your-bluorn-project'
+      href: 'https://www.figma.com/design/your-bluorn-project'
     },
     {
       name: 'Cards',
       image: '/projects/cards.png',
-      figmaLink: 'https://www.figma.com/design/your-cards-project'
+      href: 'https://www.figma.com/design/your-cards-project'
     }
   ];
 
