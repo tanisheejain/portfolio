@@ -1,7 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CRTMonitor from './CRTMonitor';
 
 const Homepage = () => {
+  const [isMuted, setIsMuted] = useState(false);
+
+  // Initialize audio context immediately
+  useEffect(() => {
+    const initAudio = () => {
+      try {
+        // Create a global audio context
+        if (!window.globalAudioContext) {
+          window.globalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        // Set global mute state
+        window.isAudioMuted = isMuted;
+      } catch (e) {
+        console.log('Audio context initialization failed:', e);
+      }
+    };
+
+    initAudio();
+  }, [isMuted]);
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    window.isAudioMuted = !isMuted;
+  };
   // Project data matching the exact layout from your image
   const projects = [
     {
@@ -27,7 +51,15 @@ const Homepage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8">
+    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8 relative">
+      {/* Mute Toggle Button */}
+      <button
+        onClick={toggleMute}
+        className="absolute top-8 right-8 text-white font-mono text-xs cursor-pointer hover:text-gray-400 transition-colors"
+      >
+        {isMuted ? '🔇 UNMUTE' : '🔊 MUTE'}
+      </button>
+
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-4xl mb-4 tracking-wider text-white font-mono">

@@ -6,11 +6,25 @@ const CRTMonitor = ({ project, index }) => {
   const [showText, setShowText] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
-
   const playStaticSound = () => {
+    // Check if audio is muted
+    if (window.isAudioMuted) return;
+    
     // Create a simple beep sound using Web Audio API
     try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      // Use global audio context if available
+      let audioContext = window.globalAudioContext;
+      
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      // Resume audio context if it's suspended
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
       
@@ -31,6 +45,7 @@ const CRTMonitor = ({ project, index }) => {
   };
 
   const playClickSound = () => {
+    if (window.isAudioMuted) return;
     try {
       const audio = new Audio('/sounds/click.wav');
       audio.volume = 0.3;
@@ -41,12 +56,82 @@ const CRTMonitor = ({ project, index }) => {
   };
 
   const playStartupHum = () => {
+    if (window.isAudioMuted) return;
     try {
       const audio = new Audio('/sounds/startup_hum.wav');
       audio.volume = 0.2;
       audio.play().catch(e => console.log('Startup hum not available:', e));
     } catch (e) {
       console.log('Startup hum not available:', e);
+    }
+  };
+
+  const playTypingSound = () => {
+    if (window.isAudioMuted) return;
+    try {
+      // Create a typing sound using Web Audio API
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      
+      // Create a quick typing-like sound
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+      oscillator.type = 'square';
+      
+      gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.05);
+    } catch (e) {
+      console.log('Typing sound not available:', e);
+    }
+  };
+
+  const playBrighteningSound = () => {
+    if (window.isAudioMuted) return;
+    try {
+      // Create a brightening sound using Web Audio API
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      
+      // Create a brightening/woosh-like sound
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.3);
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.02, audioContext.currentTime + 0.3);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (e) {
+      console.log('Brightening sound not available:', e);
     }
   };
 
@@ -61,12 +146,23 @@ const CRTMonitor = ({ project, index }) => {
     // 3. Play click sound immediately
     playClickSound();
     
-    // 4. After typewriter text finishes (~2s), show white overlay and play startup hum
+    // 4. Play typing sounds during typewriter animation (multiple times)
+    const typingInterval = setInterval(() => {
+      playTypingSound();
+    }, 100); // Play typing sound every 100ms
+    
+    // Stop typing sounds after 2 seconds
+    setTimeout(() => {
+      clearInterval(typingInterval);
+    }, 2000);
+    
+    // 5. After typewriter text finishes (~2s), show white overlay and play sounds
     setTimeout(() => {
       setShowOverlay(true);
-      playStartupHum();
+      playStartupHum(); // Keep the startup hum
+      playBrighteningSound(); // Add brightening sound
       
-      // 5. After overlay animation completes (~0.4s), navigate to project href
+      // 6. After overlay animation completes (~0.4s), navigate to project href
       setTimeout(() => {
         if (newTab) {
           newTab.location.href = project.href;
