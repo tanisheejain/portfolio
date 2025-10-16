@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PixelIcon from './PixelIcon';
 
-const Dock = () => {
+const Dock = ({ onNotionClick }) => {
   const [clickedIcon, setClickedIcon] = useState(null);
 
   const playSound = (soundType) => {
@@ -49,6 +49,11 @@ const Dock = () => {
   const handleIconClick = (iconType) => {
     setClickedIcon(iconType);
     playSound('click');
+    
+    // Handle specific icon actions
+    if (iconType === 'notion' && onNotionClick) {
+      onNotionClick();
+    }
     
     // Reset animation after completion
     setTimeout(() => {
