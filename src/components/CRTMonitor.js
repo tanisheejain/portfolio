@@ -5,12 +5,6 @@ const CRTMonitor = ({ project, index }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [showText, setShowText] = useState(false);
 
-  // Different monitor frame styles for variety
-  const frameStyles = [
-    'border-4 border-white', // Classic thick border
-    'border-2 border-white bg-black', // Thin border with black background
-    'border-4 border-white bg-black', // Thick border with black background
-  ];
 
   const playStaticSound = () => {
     // Create a simple beep sound using Web Audio API
@@ -58,65 +52,53 @@ const CRTMonitor = ({ project, index }) => {
 
   return (
     <div className="relative group">
-      {/* Monitor Frame */}
+      {/* Just the image without any monitor frame */}
       <div 
-        className={`
-          w-32 h-32 cursor-pointer transition-all duration-300
-          ${frameStyles[index % frameStyles.length]}
-          ${isHovered ? 'animate-crt-flicker' : ''}
-          ${isClicked ? 'animate-crt-brightness' : ''}
-        `}
+        className="w-32 h-32 cursor-pointer transition-all duration-300 relative"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
       >
-        {/* Screen Content */}
-        <div className="w-full h-full relative overflow-hidden bg-black">
-          {/* Project Image */}
-          <div 
-            className={`
-              absolute inset-0 transition-opacity duration-300
-              ${isHovered ? 'opacity-0' : 'opacity-100'}
-            `}
-          >
-            <img
-              src={project.image}
-              alt={project.name}
-              className="w-full h-full object-cover filter invert"
-              style={{ imageRendering: 'pixelated' }}
-            />
-          </div>
-
-          {/* Static Noise Overlay */}
-          <div 
-            className={`
-              absolute inset-0 transition-opacity duration-300
-              ${isHovered ? 'opacity-100' : 'opacity-0'}
-            `}
-          >
-            <img
-              src="/static.svg"
-              alt="static"
-              className="w-full h-full object-cover opacity-50"
-              style={{ imageRendering: 'pixelated' }}
-            />
-          </div>
-
-          {/* Typewriter Text */}
-          {showText && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90">
-              <div className="text-white text-xs font-mono text-center p-2">
-                <div className="animate-typewriter">
-                  Opening "{project.name}"...
-                </div>
-              </div>
-            </div>
-          )}
+        {/* Project Image */}
+        <div 
+          className={`
+            w-full h-full transition-opacity duration-300
+            ${isHovered ? 'opacity-0' : 'opacity-100'}
+          `}
+        >
+          <img
+            src={project.image}
+            alt={project.name}
+            className="w-full h-full object-cover"
+            style={{ imageRendering: 'pixelated' }}
+          />
         </div>
 
-        {/* Monitor Stand */}
-        <div className="w-16 h-2 bg-white mx-auto mt-1"></div>
-        <div className="w-20 h-1 bg-white mx-auto"></div>
+        {/* Static Noise Overlay */}
+        <div 
+          className={`
+            absolute inset-0 transition-opacity duration-300
+            ${isHovered ? 'opacity-100' : 'opacity-0'}
+          `}
+        >
+          <img
+            src="/projects/static.png"
+            alt="static"
+            className="w-full h-full object-cover opacity-50"
+            style={{ imageRendering: 'pixelated' }}
+          />
+        </div>
+
+        {/* Typewriter Text */}
+        {showText && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-90">
+            <div className="text-white text-xs font-mono text-center p-2">
+              <div className="animate-typewriter">
+                Opening "{project.name}"...
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Project Label */}

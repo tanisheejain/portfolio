@@ -2,52 +2,27 @@ import React from 'react';
 import CRTMonitor from './CRTMonitor';
 
 const Homepage = () => {
-  // Project data - you can modify these with your actual projects
+  // Project data matching the exact layout from your image
   const projects = [
     {
       name: 'Nami',
-      image: '/projects/nami.svg',
+      image: '/projects/nami.png',
       figmaLink: 'https://www.figma.com/design/your-nami-project'
     },
     {
-      name: 'Gully',
-      image: '/projects/gully.svg',
+      name: 'गली LABS',
+      image: '/projects/gullylabs.png',
       figmaLink: 'https://www.figma.com/design/your-gully-project'
     },
     {
-      name: 'Project 3',
-      image: '/projects/project3.svg',
-      figmaLink: 'https://www.figma.com/design/your-project3'
+      name: 'BLUORNƏ',
+      image: '/projects/bluorng.png',
+      figmaLink: 'https://www.figma.com/design/your-bluorn-project'
     },
     {
-      name: 'Project 4',
-      image: '/projects/project4.svg',
-      figmaLink: 'https://www.figma.com/design/your-project4'
-    },
-    {
-      name: 'Project 5',
-      image: '/projects/project5.svg',
-      figmaLink: 'https://www.figma.com/design/your-project5'
-    },
-    {
-      name: 'Project 6',
-      image: '/projects/project6.svg',
-      figmaLink: 'https://www.figma.com/design/your-project6'
-    },
-    {
-      name: 'Project 7',
-      image: '/projects/project7.svg',
-      figmaLink: 'https://www.figma.com/design/your-project7'
-    },
-    {
-      name: 'Project 8',
-      image: '/projects/project8.svg',
-      figmaLink: 'https://www.figma.com/design/your-project8'
-    },
-    {
-      name: 'Project 9',
-      image: '/projects/project9.svg',
-      figmaLink: 'https://www.figma.com/design/your-project9'
+      name: 'Cards',
+      image: '/projects/cards.png',
+      figmaLink: 'https://www.figma.com/design/your-cards-project'
     }
   ];
 
@@ -66,15 +41,21 @@ const Homepage = () => {
         </p>
       </div>
 
-      {/* 3x3 Grid of Monitors */}
-      <div className="grid grid-cols-3 gap-8 max-w-4xl">
-        {projects.map((project, index) => (
-          <CRTMonitor 
-            key={project.name} 
-            project={project} 
-            index={index}
-          />
-        ))}
+      {/* Custom Layout matching the second image exactly */}
+      <div className="flex flex-col items-center gap-12 max-w-4xl">
+        {/* Top row: 3 monitors */}
+        <div className="flex gap-12">
+          <CRTMonitor project={projects[0]} index={0} />
+          <CRTMonitor project={projects[1]} index={1} />
+          <CRTMonitor project={projects[2]} index={2} />
+        </div>
+        
+        {/* Bottom row: 1 monitor aligned with first */}
+        <div className="flex gap-12">
+          <CRTMonitor project={projects[3]} index={3} />
+          <div className="w-32"></div> {/* Spacer to match layout */}
+          <div className="w-32"></div> {/* Spacer to match layout */}
+        </div>
       </div>
 
       {/* Footer */}
