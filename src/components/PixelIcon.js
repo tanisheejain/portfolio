@@ -27,9 +27,7 @@ const PixelIcon = ({ type, onClick, onMouseEnter, onMouseLeave }) => {
         alt={type}
         className="w-12 h-12 filter invert"
         style={{
-          imageRendering: 'pixelated',
-          imageRendering: '-moz-crisp-edges',
-          imageRendering: 'crisp-edges'
+          imageRendering: 'pixelated'
         }}
       />
     </div>
