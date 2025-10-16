@@ -77,7 +77,7 @@ const Dock = () => {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black border-t-2 border-white">
+    <div className="fixed bottom-0 left-0 right-0 bg-black">
       <div className="flex justify-center items-center py-4 px-4">
         <div className="flex space-x-2 bg-black p-3 rounded-lg border-2 border-white">
           {icons.map((icon) => (
