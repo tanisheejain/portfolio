@@ -51,7 +51,7 @@ const Homepage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center p-8 relative">
+    <div className="min-h-screen bg-black flex flex-col items-center p-8 relative">
       {/* Mute Toggle Button */}
       <button
         onClick={toggleMute}
@@ -61,26 +61,26 @@ const Homepage = () => {
       </button>
 
       {/* Header */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-16 mt-8">
         <h1 className="text-4xl mb-4 tracking-wider text-white font-mono">
           PROJECTS
         </h1>
       </div>
 
       {/* Custom Layout matching the second image exactly */}
-      <div className="flex flex-col items-center gap-12 max-w-4xl">
+      <div className="flex flex-col items-center gap-20 max-w-5xl pb-20">
         {/* Top row: 3 monitors */}
-        <div className="flex gap-12">
+        <div className="flex gap-16">
           <CRTMonitor project={projects[0]} index={0} />
           <CRTMonitor project={projects[1]} index={1} />
           <CRTMonitor project={projects[2]} index={2} />
         </div>
         
         {/* Bottom row: 1 monitor aligned with first */}
-        <div className="flex gap-12">
+        <div className="flex gap-16">
           <CRTMonitor project={projects[3]} index={3} />
-          <div className="w-56"></div> {/* Spacer to match layout */}
-          <div className="w-56"></div> {/* Spacer to match layout */}
+          <div className="w-72"></div> {/* Spacer to match layout */}
+          <div className="w-72"></div> {/* Spacer to match layout */}
         </div>
       </div>
 

@@ -194,7 +194,7 @@ const CRTMonitor = ({ project, index }) => {
     <div className="relative group">
       {/* Just the image without any monitor frame */}
       <div 
-        className="w-56 h-56 cursor-pointer transition-all duration-300 relative"
+        className="w-72 h-72 cursor-pointer transition-all duration-300 relative"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
