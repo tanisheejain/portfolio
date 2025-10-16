@@ -6,67 +6,115 @@ const CRTMonitor = ({ project, index }) => {
   const [showText, setShowText] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
 
-  const playStaticSound = () => {
+  const playStaticSound = async () => {
     // Check if audio is muted
-    if (window.isAudioMuted) return;
+    if (window.isAudioMuted) {
+      return;
+    }
     
     // Create a simple beep sound using Web Audio API
     try {
-      // Use global audio context if available
       let audioContext = window.globalAudioContext;
-      
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
         window.globalAudioContext = audioContext;
       }
       
-      // Resume audio context if it's suspended
       if (audioContext.state === 'suspended') {
-        audioContext.resume();
+        await audioContext.resume();
       }
       
+      // Create a quick static beep sound
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
       
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
       
-      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-      oscillator.type = 'square';
+      // High frequency for a sharp static sound
+      oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
+      oscillator.type = 'square'; // Square wave for sharper sound
       
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      // Quick, sharp beep
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
       
       oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.1);
+      oscillator.stop(audioContext.currentTime + 0.05);
     } catch (e) {
-      console.log('Audio not available:', e);
+      // Audio not available
     }
   };
 
-  const playClickSound = () => {
+  const playClickSound = async () => {
     if (window.isAudioMuted) return;
     try {
-      const audio = new Audio('/sounds/click.wav');
-      audio.volume = 0.3;
-      audio.play().catch(e => console.log('Click sound not available:', e));
+      // Create a click sound using Web Audio API
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+      
+      // Create a quick click sound
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+      oscillator.type = 'square';
+      
+      gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.15);
     } catch (e) {
       console.log('Click sound not available:', e);
     }
   };
 
-  const playStartupHum = () => {
+  const playStartupHum = async () => {
     if (window.isAudioMuted) return;
     try {
-      const audio = new Audio('/sounds/startup_hum.wav');
-      audio.volume = 0.2;
-      audio.play().catch(e => console.log('Startup hum not available:', e));
+      // Create a startup hum sound using Web Audio API
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+      
+      // Create a low hum sound
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(60, audioContext.currentTime);
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.4);
     } catch (e) {
       console.log('Startup hum not available:', e);
     }
   };
 
-  const playTypingSound = () => {
+  const playTypingSound = async () => {
     if (window.isAudioMuted) return;
     try {
       // Create a typing sound using Web Audio API
@@ -77,7 +125,7 @@ const CRTMonitor = ({ project, index }) => {
       }
       
       if (audioContext.state === 'suspended') {
-        audioContext.resume();
+        await audioContext.resume();
       }
       
       // Create a quick typing-like sound
@@ -90,17 +138,17 @@ const CRTMonitor = ({ project, index }) => {
       oscillator.frequency.setValueAtTime(1200, audioContext.currentTime);
       oscillator.type = 'square';
       
-      gainNode.gain.setValueAtTime(0.08, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+      gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
       
       oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.05);
+      oscillator.stop(audioContext.currentTime + 0.08);
     } catch (e) {
       console.log('Typing sound not available:', e);
     }
   };
 
-  const playBrighteningSound = () => {
+  const playBrighteningSound = async () => {
     if (window.isAudioMuted) return;
     try {
       // Create a brightening sound using Web Audio API
@@ -111,7 +159,7 @@ const CRTMonitor = ({ project, index }) => {
       }
       
       if (audioContext.state === 'suspended') {
-        audioContext.resume();
+        await audioContext.resume();
       }
       
       // Create a brightening/woosh-like sound
@@ -125,7 +173,7 @@ const CRTMonitor = ({ project, index }) => {
       oscillator.frequency.exponentialRampToValueAtTime(800, audioContext.currentTime + 0.3);
       oscillator.type = 'sine';
       
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
       gainNode.gain.exponentialRampToValueAtTime(0.02, audioContext.currentTime + 0.3);
       
       oscillator.start(audioContext.currentTime);

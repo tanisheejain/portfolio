@@ -26,6 +26,7 @@ const Homepage = () => {
     setIsMuted(!isMuted);
     window.isAudioMuted = !isMuted;
   };
+
   // Project data matching the exact layout from your image
   const projects = [
     {
