@@ -1,6 +1,31 @@
 import React, { useState, useRef } from 'react';
 import { blogEntries } from '../data/blogs';
 
+// Function to get the correct image filename for each blog
+const getImageFilename = (blog) => {
+  const filenameMap = {
+    'to-do-list': 'to_do_list',
+    'anger-then-remorse': 'anger_then_remorse',
+    'constructive-criticism': 'constructive_criticism',
+    '21-things-2021': '21_things_i_learned_in_2021',
+    'new-year-resolutions-2022': 'new_year_resolutions_2022',
+    'turning-17': 'turning_17',
+    'confidence': 'confidence',
+    'beauty-standards': 'beauty_standards',
+    'cutting-the-clutter': 'cutting_the_clutter',
+    'college-concoction': 'the_college_concoction',
+    'through-the-lens-of-red': 'through_the_lens_of_red',
+    'unravelling-the-web': 'unravelling_the_web',
+    'my-rookie-year': 'my_rookie_year',
+    'is-happiness-a-choice': 'is_happiness_a_choice',
+    'the-bear-hurts': 'the_bear_hurts_the_bear_heals_the_bear_is_art',
+    'gone-girl-notes': 'i_read_gone_girl_and_now_i_need_to_talk',
+    'practical-vs-emo': 'practical_vs_emo'
+  };
+  
+  return filenameMap[blog.slug] || blog.slug.replace(/-/g, '_');
+};
+
 const BlogWindow = ({ onClose }) => {
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
@@ -165,12 +190,41 @@ const BlogCard = ({ blog, onClick, onHover }) => {
       {/* Cover Image */}
       <div className="w-full h-32 relative overflow-hidden">
         <img
-          src={`/photos/blogs/${blog.slug}.jpg`}
+          src={`/photos/${getImageFilename(blog)}.png?v=${Date.now()}`}
           alt={blog.title}
           className="w-full h-full object-cover"
           style={{ imageRendering: 'pixelated' }}
           onError={(e) => {
-            e.target.style.display = 'none';
+            // Create a comprehensive list of possible filenames
+            const baseFilename = getImageFilename(blog);
+            // For "Through the Lens of Red", prioritize .png
+            const possibleFilenames = blog.slug === 'through-the-lens-of-red' 
+              ? [
+                  `${baseFilename}.png`,
+                  `${baseFilename}.webp`,
+                  `${baseFilename}.jpg`,
+                  `${baseFilename}.jpeg`
+                ]
+              : [
+                  `${baseFilename}.jpeg`,
+                  `${baseFilename}.jpg`, 
+                  `${baseFilename}.png`,
+                  `${baseFilename}.webp`
+                ];
+            
+            let currentIndex = 0;
+            const tryNextFilename = () => {
+              if (currentIndex < possibleFilenames.length) {
+                e.target.src = `/photos/${possibleFilenames[currentIndex]}?v=${Date.now()}`;
+                currentIndex++;
+              } else {
+                // If all attempts fail, hide the image
+                e.target.style.display = 'none';
+              }
+            };
+            
+            // Start trying alternative filenames
+            tryNextFilename();
           }}
         />
         
