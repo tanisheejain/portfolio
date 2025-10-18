@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PixelIcon from './PixelIcon';
 
-const Dock = ({ onNotionClick }) => {
+const Dock = ({ onNotionClick, onGalleryClick }) => {
   const [clickedIcon, setClickedIcon] = useState(null);
   const [showFlash, setShowFlash] = useState(false);
 
@@ -76,6 +76,8 @@ const Dock = ({ onNotionClick }) => {
     // Handle specific icon actions
     if (iconType === 'notion' && onNotionClick) {
       onNotionClick();
+    } else if (iconType === 'gallery' && onGalleryClick) {
+      onGalleryClick();
     } else if (iconType === 'twitter') {
       // Play click sound and show flash animation for Twitter
       playClickSound();
