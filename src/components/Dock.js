@@ -3,6 +3,7 @@ import PixelIcon from './PixelIcon';
 
 const Dock = ({ onNotionClick }) => {
   const [clickedIcon, setClickedIcon] = useState(null);
+  const [showFlash, setShowFlash] = useState(false);
 
   const playSound = (soundType) => {
     // Create audio context for retro sounds
@@ -46,6 +47,28 @@ const Dock = ({ onNotionClick }) => {
     oscillator.stop(audioContext.currentTime + duration);
   };
 
+  const playClickSound = async () => {
+    if (window.isAudioMuted) return;
+    try {
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+      
+      // Load and play click.wav
+      const audio = new Audio('/sounds/click.wav');
+      audio.volume = 0.5;
+      await audio.play();
+    } catch (e) {
+      console.log('Audio not available:', e);
+    }
+  };
+
   const handleIconClick = (iconType) => {
     setClickedIcon(iconType);
     playSound('click');
@@ -53,6 +76,26 @@ const Dock = ({ onNotionClick }) => {
     // Handle specific icon actions
     if (iconType === 'notion' && onNotionClick) {
       onNotionClick();
+    } else if (iconType === 'twitter') {
+      // Play click sound and show flash animation for Twitter
+      playClickSound();
+      setShowFlash(true);
+      
+      // Hide flash after animation and open Twitter link
+      setTimeout(() => {
+        setShowFlash(false);
+        window.open('https://x.com/TanisheeJain', '_blank', 'noopener,noreferrer');
+      }, 300);
+    } else if (iconType === 'linkedin') {
+      // Play click sound and show flash animation for LinkedIn
+      playClickSound();
+      setShowFlash(true);
+      
+      // Hide flash after animation and open LinkedIn link
+      setTimeout(() => {
+        setShowFlash(false);
+        window.open('https://www.linkedin.com/in/tanishee-jain-50b79a220/', '_blank', 'noopener,noreferrer');
+      }, 300);
     }
     
     // Reset animation after completion
@@ -60,10 +103,12 @@ const Dock = ({ onNotionClick }) => {
       setClickedIcon(null);
     }, 100);
     
-    // Play boot sound after click
-    setTimeout(() => {
-      playSound('boot');
-    }, 50);
+    // Play boot sound after click (except for Twitter and LinkedIn)
+    if (iconType !== 'twitter' && iconType !== 'linkedin') {
+      setTimeout(() => {
+        playSound('boot');
+      }, 50);
+    }
   };
 
   const handleIconHover = () => {
@@ -83,6 +128,11 @@ const Dock = ({ onNotionClick }) => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black">
+      {/* Flash overlay */}
+      {showFlash && (
+        <div className="fixed inset-0 bg-white animate-white-overlay pointer-events-none z-50"></div>
+      )}
+      
       <div className="flex justify-center items-center py-4 px-4">
         <div className="flex space-x-2 bg-black p-3 rounded-lg border-2 border-white">
           {icons.map((icon) => (
