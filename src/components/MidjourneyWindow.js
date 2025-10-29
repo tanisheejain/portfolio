@@ -2,7 +2,15 @@ import React, { useState, useRef } from 'react';
 import { MJ_GROUPS } from '../data/midjourney';
 
 const MidjourneyWindow = ({ onClose }) => {
-  const [position, setPosition] = useState({ x: 150, y: 120 });
+  const [position, setPosition] = useState(() => {
+    // Center the window on screen initially
+    const windowWidth = 1000; // 800px * 1.25
+    const windowHeight = 700; // increased by 100px
+    return {
+      x: (window.innerWidth - windowWidth) / 2,
+      y: (window.innerHeight - windowHeight) / 2 - 40 // slightly more up
+    };
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isMinimized, setIsMinimized] = useState(false);
@@ -53,8 +61,8 @@ const MidjourneyWindow = ({ onClose }) => {
       const newY = e.clientY - dragOffset.y;
       
       // Keep window within viewport bounds
-      const maxX = window.innerWidth - 800; // window width
-      const maxY = window.innerHeight - 600; // window height
+      const maxX = window.innerWidth - 1000; // window width (800px * 1.25)
+      const maxY = window.innerHeight - 700; // updated window height
       
       setPosition({
         x: Math.max(0, Math.min(newX, maxX)),
@@ -85,8 +93,8 @@ const MidjourneyWindow = ({ onClose }) => {
   const containerStyle = {
     left: isMaximized ? 0 : position.x,
     top: isMaximized ? 0 : position.y,
-    width: isMaximized ? '100vw' : '800px',
-    height: isMaximized ? '100vh' : (isMinimized ? 'auto' : '600px')
+    width: isMaximized ? '100vw' : '1000px',
+    height: isMaximized ? '100vh' : (isMinimized ? 'auto' : '700px')
   };
 
   return (
