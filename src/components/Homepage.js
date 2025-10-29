@@ -3,6 +3,7 @@ import CRTMonitor from './CRTMonitor';
 
 const Homepage = () => {
   const [isMuted, setIsMuted] = useState(false);
+  const [sparks, setSparks] = useState([]);
 
   // Initialize audio context immediately
   useEffect(() => {
@@ -21,6 +22,37 @@ const Homepage = () => {
 
     initAudio();
   }, [isMuted]);
+
+  // Cursor spark effect
+  useEffect(() => {
+    const sparkChars = ['*', '+', '.', 'x'];
+    let sparkIdCounter = 0;
+
+    const handleMouseMove = (e) => {
+      const randomChar = sparkChars[Math.floor(Math.random() * sparkChars.length)];
+      const size = Math.random() * 3 + 14; // 14-17px (increased by 6px)
+      
+      const newSpark = {
+        id: sparkIdCounter++,
+        x: e.clientX,
+        y: e.clientY,
+        char: randomChar,
+        size: size
+      };
+
+      setSparks(prev => [...prev, newSpark]);
+
+      // Remove spark after 200ms
+      setTimeout(() => {
+        setSparks(prev => prev.filter(spark => spark.id !== newSpark.id));
+      }, 200);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
@@ -90,6 +122,39 @@ const Homepage = () => {
         </div>
       </div>
 
+      {/* Cursor spark effect */}
+      {sparks.map(spark => (
+        <div
+          key={spark.id}
+          style={{
+            position: 'fixed',
+            left: spark.x,
+            top: spark.y,
+            fontSize: `${spark.size}px`,
+            color: '#ffffff99',
+            pointerEvents: 'none',
+            fontFamily: 'monospace',
+            userSelect: 'none',
+            transform: 'translate(-50%, -50%)',
+            opacity: 1,
+            animation: 'sparkFade 200ms ease-out forwards',
+            zIndex: 9999
+          }}
+        >
+          {spark.char}
+        </div>
+      ))}
+
+      <style>{`
+        @keyframes sparkFade {
+          0% {
+            opacity: 1;
+          }
+          100% {
+            opacity: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };
