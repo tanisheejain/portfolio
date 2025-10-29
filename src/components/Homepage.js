@@ -32,22 +32,27 @@ const Homepage = () => {
     {
       name: 'Nami',
       image: '/projects/nami.png',
-      href: 'https://drive.google.com/file/d/1UVI7kN4oDeVfGonKaQKw52GDW6Gw6OdS/view?usp=share_link'
+      href: 'https://drive.google.com/file/d/1OfFdkyL598RZnXJd7d7WdBBuhqaQH8uW/view?usp=share_link'
     },
     {
       name: 'गली LABS',
       image: '/projects/gullylabs.png',
-      href: 'https://www.figma.com/design/your-gully-project'
+      href: 'https://drive.google.com/file/d/1UU7onNkfFHz3WFS3BqGKKf9VKAcUU0Ym/view?usp=share_link'
     },
     {
       name: 'BLUORNƏ',
       image: '/projects/bluorng.png',
-      href: 'https://www.figma.com/design/your-bluorn-project'
+      href: 'https://drive.google.com/file/d/1rSkYDEcMEOAsUMcI1iElDaSH7UEVFZVx/view?usp=share_link'
     },
     {
       name: 'Cards',
       image: '/projects/cards.png',
-      href: 'https://www.figma.com/design/your-cards-project'
+      href: 'https://drive.google.com/file/d/1LoyeYvTR-FTLZtcsdov0gsF5pOuWwAhF/view?usp=share_link'
+    },
+    {
+      name: 'Camii',
+      image: '/photos/camii.png',
+      href: 'https://drive.google.com/file/d/1vuebbAjrn70wz0O33bk_pNFg00xLMoBK/view?usp=share_link'
     }
   ];
 
@@ -77,10 +82,10 @@ const Homepage = () => {
           <CRTMonitor project={projects[2]} index={2} />
         </div>
         
-        {/* Bottom row: 1 monitor aligned with first */}
+        {/* Bottom row: 2 monitors aligned with first */}
         <div className="flex gap-16">
           <CRTMonitor project={projects[3]} index={3} />
-          <div className="w-72"></div> {/* Spacer to match layout */}
+          <CRTMonitor project={projects[4]} index={4} />
           <div className="w-72"></div> {/* Spacer to match layout */}
         </div>
       </div>
