@@ -57,7 +57,7 @@ const Homepage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center p-8 relative">
+    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh' }}>
       {/* Mute Toggle Button */}
       <button
         onClick={toggleMute}
@@ -74,7 +74,7 @@ const Homepage = () => {
       </div>
 
       {/* Custom Layout matching the second image exactly */}
-      <div className="flex flex-col items-center gap-20 max-w-5xl pb-20">
+      <div className="flex flex-col items-center gap-12 max-w-5xl pb-40 mb-20">
         {/* Top row: 3 monitors */}
         <div className="flex gap-16">
           <CRTMonitor project={projects[0]} index={0} />
