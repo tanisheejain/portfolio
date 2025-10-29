@@ -1,17 +1,17 @@
 export const galleryItems = [
   { 
-    title: "Uttan photos and my lens", 
+    title: "Uttan through my lens", 
     slug: "uttan-photos-and-my-lens", 
-    image: "/photos/gallery/uttan-photos-and-my-lens.jpg" 
+    image: "/Uttan/PHO_ICA2_19_05.jpg" 
   },
   { 
-    title: "Street portraits, monsoon", 
+    title: "Museum: CSMVS", 
     slug: "street-portraits-monsoon", 
-    image: "/photos/gallery/street-portraits-monsoon.jpg" 
+    image: "/Museum/buddha side statue.jpg" 
   },
   { 
-    title: "Night cycles", 
+    title: "Transparency of glass", 
     slug: "night-cycles", 
-    image: "/photos/gallery/night-cycles.jpg" 
+    image: "/glass/PHOTO-2024-04-15-20-56-10 2.jpg" 
   }
 ];

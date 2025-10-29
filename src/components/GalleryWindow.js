@@ -8,7 +8,59 @@ const GalleryWindow = ({ onClose }) => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
+  const [currentGallery, setCurrentGallery] = useState(null); // null = list view, string = gallery folder name
   const windowRef = useRef(null);
+
+  // Uttan images
+  const uttanImages = [
+    'PHO_ICA2_19_04.jpg',
+    'PHO_ICA2_19_01.jpg',
+    'PHO_ICA2_19_02.jpg',
+    'PHO_ICA2_19_03.jpg',
+    'PHO_ICA2_19_05.jpg',
+    'PHO_ICA2_19_06.jpg',
+    'PHO_ICA2_19_07.jpg',
+    'PHO_ICA2_19_08.jpg',
+    'PHO_ICA2_19_09.jpg',
+    'PHO_ICA2_19_10.jpg',
+    'PHO_ICA2_19_11.jpg',
+    'PHO_ICA2_19_12.jpg',
+    'PHO_ICA2_19_12(1).jpg'
+  ];
+
+  // Museum images
+  const museumImages = [
+    '_DSC2814-Enhanced-NR.jpg',
+    '_DSC3285-Enhanced-NR.jpg',
+    '_DSC3382-Enhanced-NR.jpg',
+    '_DSC3504-Enhanced-NR.jpg',
+    '_DSC3766-Enhanced-NR.jpg',
+    '_DSC3898-Enhanced-NR.jpg',
+    'bw ceiling.jpg',
+    'bw couple.jpg',
+    'buddha side statue.jpg',
+    'dia.jpg',
+    'editted.jpg',
+    'editted(1).jpg',
+    'post processing.jpg',
+    'post processing(1).jpg',
+    'post processing(2).jpg'
+  ];
+
+  // Glass images
+  const glassImages = [
+    'PHOTO-2024-04-15-20-56-05.jpg',
+    'PHOTO-2024-04-15-20-56-06.jpg',
+    'PHOTO-2024-04-15-20-56-06 2.jpg',
+    'PHOTO-2024-04-15-20-56-07.jpg',
+    'PHOTO-2024-04-15-20-56-07 2.jpg',
+    'PHOTO-2024-04-15-20-56-08.jpg',
+    'PHOTO-2024-04-15-20-56-10 2.jpg',
+    'PHOTO-2024-04-15-20-56-11.jpg',
+    'PHOTO-2024-04-15-20-56-14.jpg',
+    'PHOTO-2024-04-15-20-56-15 2.jpg',
+    'PHOTO-2024-04-15-20-56-15 3.jpg'
+  ];
 
   const playTickSound = async () => {
     if (window.isAudioMuted) return;
@@ -118,16 +170,28 @@ const GalleryWindow = ({ onClose }) => {
     await playClickSound();
     setShowFlash(true);
     
-    // Hide flash after animation and open image
+    // Hide flash after animation
     setTimeout(() => {
       setShowFlash(false);
-      if (item.href) {
+      
+      // Switch to the appropriate gallery view
+      if (item.title === "Uttan through my lens") {
+        setCurrentGallery('uttan');
+      } else if (item.title === 'Museum: CSMVS') {
+        setCurrentGallery('museum');
+      } else if (item.title === 'Transparency of glass') {
+        setCurrentGallery('glass');
+      } else if (item.href) {
         window.open(item.href, '_blank', 'noopener,noreferrer');
       } else {
         // Open the image directly
         window.open(item.image, '_blank', 'noopener,noreferrer');
       }
     }, 300);
+  };
+
+  const handleBackClick = () => {
+    setCurrentGallery(null);
   };
 
   const containerStyle = {
@@ -184,28 +248,119 @@ const GalleryWindow = ({ onClose }) => {
 
         {/* Window Content */}
         <div className="p-4 h-full overflow-y-auto bg-black text-white" style={{ display: isMinimized ? 'none' : 'block' }}>
-          {/* Header Content */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-mono mb-4 tracking-wider">Gallery</h1>
-            <p className="text-sm font-mono leading-relaxed">
-              This is a placeholder text block that will be replaced later. 
-              It contains multiple lines of text to demonstrate the layout 
-              and spacing of the gallery window content area.
-            </p>
-          </div>
+          {currentGallery === null ? (
+            <>
+              {/* Header Content */}
+              <div className="mb-6">
+                <h1 className="text-2xl font-mono mb-4 tracking-wider">Gallery</h1>
+                <p className="text-sm font-mono leading-relaxed">
+                  This is a placeholder text block that will be replaced later. 
+                  It contains multiple lines of text to demonstrate the layout 
+                  and spacing of the gallery window content area.
+                </p>
+              </div>
 
-          {/* Gallery Items List */}
-          <div className="space-y-0">
-            {galleryItems.map((item, index) => (
-              <GalleryItem
-                key={item.slug}
-                item={item}
-                onClick={() => handleGalleryItemClick(item)}
-                onHover={playTickSound}
-                isLast={index === galleryItems.length - 1}
-              />
-            ))}
-          </div>
+              {/* Gallery Items List */}
+              <div className="space-y-0">
+                {galleryItems.map((item, index) => (
+                  <GalleryItem
+                    key={item.slug}
+                    item={item}
+                    onClick={() => handleGalleryItemClick(item)}
+                    onHover={playTickSound}
+                    isLast={index === galleryItems.length - 1}
+                  />
+                ))}
+              </div>
+            </>
+          ) : currentGallery === 'uttan' ? (
+            <>
+              {/* Back Button */}
+              <button
+                onClick={handleBackClick}
+                className="mb-4 text-white font-mono text-xs hover:text-gray-400 transition-colors"
+              >
+                ← Back
+              </button>
+              
+              {/* Gallery Grid */}
+              <h1 className="text-2xl font-mono mb-6 tracking-wider">Uttan through my lens</h1>
+              <div className="space-y-4">
+                {uttanImages.map((imageName) => (
+                  <div key={imageName} className="w-full">
+                    <img
+                      src={`/Uttan/${imageName}`}
+                      alt={imageName}
+                      className="w-full h-auto block"
+                      style={{ 
+                        imageRendering: 'pixelated',
+                        maxHeight: '550px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : currentGallery === 'museum' ? (
+            <>
+              {/* Back Button */}
+              <button
+                onClick={handleBackClick}
+                className="mb-4 text-white font-mono text-xs hover:text-gray-400 transition-colors"
+              >
+                ← Back
+              </button>
+
+              {/* Gallery Grid */}
+              <h1 className="text-2xl font-mono mb-6 tracking-wider">Museum: CSMVS</h1>
+              <div className="space-y-4">
+                {museumImages.map((imageName) => (
+                  <div key={imageName} className="w-full">
+                    <img
+                      src={`/Museum/${imageName}`}
+                      alt={imageName}
+                      className="w-full h-auto block"
+                      style={{ 
+                        imageRendering: 'pixelated',
+                        maxHeight: '550px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : currentGallery === 'glass' ? (
+            <>
+              {/* Back Button */}
+              <button
+                onClick={handleBackClick}
+                className="mb-4 text-white font-mono text-xs hover:text-gray-400 transition-colors"
+              >
+                ← Back
+              </button>
+
+              {/* Gallery Grid */}
+              <h1 className="text-2xl font-mono mb-6 tracking-wider">Transparency of glass</h1>
+              <div className="space-y-4">
+                {glassImages.map((imageName) => (
+                  <div key={imageName} className="w-full">
+                    <img
+                      src={`/glass/${imageName}`}
+                      alt={imageName}
+                      className="w-full h-auto block"
+                      style={{ 
+                        imageRendering: 'pixelated',
+                        maxHeight: '550px',
+                        objectFit: 'contain'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
     </>
