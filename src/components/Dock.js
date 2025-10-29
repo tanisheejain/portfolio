@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PixelIcon from './PixelIcon';
 
-const Dock = ({ onNotionClick, onGalleryClick }) => {
+const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick }) => {
   const [clickedIcon, setClickedIcon] = useState(null);
   const [showFlash, setShowFlash] = useState(false);
 
@@ -78,6 +78,8 @@ const Dock = ({ onNotionClick, onGalleryClick }) => {
       onNotionClick();
     } else if (iconType === 'gallery' && onGalleryClick) {
       onGalleryClick();
+    } else if (iconType === 'midjourney' && onMidjourneyClick) {
+      onMidjourneyClick();
     } else if (iconType === 'twitter') {
       // Play click sound and show flash animation for Twitter
       playClickSound();
