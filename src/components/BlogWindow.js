@@ -30,6 +30,8 @@ const BlogWindow = ({ onClose }) => {
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
   const windowRef = useRef(null);
 
   const playTickSound = async () => {
@@ -65,7 +67,12 @@ const BlogWindow = ({ onClose }) => {
   };
 
   const handleMouseDown = (e) => {
-    if (e.target.classList.contains('window-header')) {
+    // Do not initiate drag when clicking header buttons
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
+    // Disable dragging when maximized
+    if (isMaximized) return;
+
+    if (e.target.classList.contains('window-header') || e.target.closest('.window-header')) {
       setIsDragging(true);
       const rect = windowRef.current.getBoundingClientRect();
       setDragOffset({
@@ -112,16 +119,18 @@ const BlogWindow = ({ onClose }) => {
     }
   };
 
+  const containerStyle = {
+    left: isMaximized ? 0 : position.x,
+    top: isMaximized ? 0 : position.y,
+    width: isMaximized ? '100vw' : '800px',
+    height: isMaximized ? '100vh' : (isMinimized ? 'auto' : '600px')
+  };
+
   return (
     <div
       ref={windowRef}
       className="fixed bg-black border-2 border-white z-50 select-none"
-      style={{
-        left: position.x,
-        top: position.y,
-        width: '800px',
-        height: '600px'
-      }}
+      style={containerStyle}
     >
       {/* Window Header */}
       <div
@@ -132,7 +141,24 @@ const BlogWindow = ({ onClose }) => {
         <div className="flex gap-1">
           <button
             className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
-            onClick={onClose}
+            title={isMinimized ? 'Restore' : 'Minimize'}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); if (isMaximized && !isMinimized) setIsMaximized(false); }}
+          >
+            _
+          </button>
+          <button
+            className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+            title={isMaximized ? 'Restore' : 'Maximize'}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); setIsMaximized(!isMaximized); if (isMinimized) setIsMinimized(false); }}
+          >
+            ☐
+          </button>
+          <button
+            className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => { e.stopPropagation(); onClose(); }}
           >
             ×
           </button>
@@ -140,7 +166,7 @@ const BlogWindow = ({ onClose }) => {
       </div>
 
       {/* Window Content */}
-      <div className="p-4 h-full overflow-y-auto bg-black text-white">
+      <div className="p-4 h-full overflow-y-auto bg-black text-white" style={{ display: isMinimized ? 'none' : 'block' }}>
         {/* Header Content */}
         <div className="mb-6">
           <h1 className="text-2xl font-mono mb-4 tracking-wider">Why do I write?</h1>

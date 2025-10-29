@@ -5,6 +5,8 @@ const GalleryWindow = ({ onClose }) => {
   const [position, setPosition] = useState({ x: 200, y: 150 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
   const windowRef = useRef(null);
 
@@ -63,7 +65,14 @@ const GalleryWindow = ({ onClose }) => {
   };
 
   const handleMouseDown = (e) => {
-    if (e.target.classList.contains('window-header')) {
+    // Don't drag if clicking on a button or inside the button container
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+      return;
+    }
+    // Disable dragging when maximized
+    if (isMaximized) return;
+    
+    if (e.target.classList.contains('window-header') || e.target.closest('.window-header')) {
       setIsDragging(true);
       const rect = windowRef.current.getBoundingClientRect();
       setDragOffset({
@@ -121,6 +130,13 @@ const GalleryWindow = ({ onClose }) => {
     }, 300);
   };
 
+  const containerStyle = {
+    left: isMaximized ? 0 : position.x,
+    top: isMaximized ? 0 : position.y,
+    width: isMaximized ? '100vw' : '800px',
+    height: isMaximized ? '100vh' : (isMinimized ? 'auto' : '600px')
+  };
+
   return (
     <>
       {/* Flash overlay */}
@@ -131,12 +147,7 @@ const GalleryWindow = ({ onClose }) => {
       <div
         ref={windowRef}
         className="fixed bg-black border-2 border-white z-50 select-none"
-        style={{
-          left: position.x,
-          top: position.y,
-          width: '800px',
-          height: '600px'
-        }}
+        style={containerStyle}
       >
         {/* Window Header */}
         <div
@@ -147,7 +158,24 @@ const GalleryWindow = ({ onClose }) => {
           <div className="flex gap-1">
             <button
               className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
-              onClick={onClose}
+              title={isMinimized ? 'Restore' : 'Minimize'}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); if (isMaximized && !isMinimized) setIsMaximized(false); }}
+            >
+              _
+            </button>
+            <button
+              className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+              title={isMaximized ? 'Restore' : 'Maximize'}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => { e.stopPropagation(); setIsMaximized(!isMaximized); if (isMinimized) setIsMinimized(false); }}
+            >
+              ☐
+            </button>
+            <button
+              className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+              onClick={(e) => { e.stopPropagation(); onClose(); }}
+              onMouseDown={(e) => e.stopPropagation()}
             >
               ×
             </button>
@@ -155,7 +183,7 @@ const GalleryWindow = ({ onClose }) => {
         </div>
 
         {/* Window Content */}
-        <div className="p-4 h-full overflow-y-auto bg-black text-white">
+        <div className="p-4 h-full overflow-y-auto bg-black text-white" style={{ display: isMinimized ? 'none' : 'block' }}>
           {/* Header Content */}
           <div className="mb-6">
             <h1 className="text-2xl font-mono mb-4 tracking-wider">Gallery</h1>
