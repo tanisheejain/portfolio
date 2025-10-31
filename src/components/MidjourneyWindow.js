@@ -40,19 +40,14 @@ const MidjourneyWindow = ({ onClose }) => {
   };
 
   const handleMouseDown = (e) => {
-    // Do not initiate drag when clicking header buttons
-    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) return;
-    // Disable dragging when maximized
+    if (e.target.closest('button')) return;
     if (isMaximized) return;
-
-    if (e.target.classList.contains('window-header') || e.target.closest('.window-header')) {
-      setIsDragging(true);
-      const rect = windowRef.current.getBoundingClientRect();
-      setDragOffset({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      });
-    }
+    setIsDragging(true);
+    const rect = windowRef.current.getBoundingClientRect();
+    setDragOffset({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top
+    });
   };
 
   const handleMouseMove = (e) => {
@@ -109,9 +104,9 @@ const MidjourneyWindow = ({ onClose }) => {
         onMouseDown={handleMouseDown}
       >
         <span className="text-xs font-mono">Midjourney</span>
-        <div className="flex gap-1">
+        <div className="window-controls">
           <button
-            className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+            className="window-btn"
             title={isMinimized ? 'Restore' : 'Minimize'}
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => { e.stopPropagation(); setIsMinimized(!isMinimized); if (isMaximized && !isMinimized) setIsMaximized(false); }}
@@ -119,7 +114,7 @@ const MidjourneyWindow = ({ onClose }) => {
             _
           </button>
           <button
-            className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+            className="window-btn"
             title={isMaximized ? 'Restore' : 'Maximize'}
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => { e.stopPropagation(); setIsMaximized(!isMaximized); if (isMinimized) setIsMinimized(false); }}
@@ -127,7 +122,7 @@ const MidjourneyWindow = ({ onClose }) => {
             ☐
           </button>
           <button
-            className="w-3 h-3 bg-black border border-white text-white text-xs font-mono hover:bg-gray-800"
+            className="window-btn"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => { e.stopPropagation(); onClose(); }}
           >
@@ -137,7 +132,7 @@ const MidjourneyWindow = ({ onClose }) => {
       </div>
 
       {/* Window Content */}
-      <div className="p-4 h-full overflow-y-auto bg-black text-white" style={{ display: isMinimized ? 'none' : 'block' }}>
+      <div className="p-4 h-full overflow-y-auto bg-black text-white border-b-2 border-white" style={{ display: isMinimized ? 'none' : 'block' }}>
         {/* Header Content */}
         <div className="mb-6">
           <h1 className="text-2xl font-mono mb-4 tracking-wider text-center">Midjourney</h1>

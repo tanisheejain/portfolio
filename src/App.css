@@ -50,6 +50,37 @@
   letter-spacing: 0.1em;
 }
 
+/* Window control buttons (minimize, maximize, close) */
+.window-controls {
+  display: inline-flex;
+  gap: 6px; /* slightly larger hit separation */
+}
+
+.window-btn {
+  width: 16px;
+  height: 16px;
+  background: #000;
+  border: 2px solid #ffffff; /* match white border */
+  color: #ffffff;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 10px;
+  line-height: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.window-btn:hover {
+  background: #111111;
+}
+
+.window-btn:active {
+  transform: translateY(1px);
+}
+
 /* Ensure no anti-aliasing */
 * {
   -webkit-font-smoothing: none;
