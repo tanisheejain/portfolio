@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PixelIcon from './PixelIcon';
 
-const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick }) => {
+const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick, onSettingsClick }) => {
   const [clickedIcon, setClickedIcon] = useState(null);
   const [showFlash, setShowFlash] = useState(false);
 
@@ -82,6 +82,8 @@ const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick
       onMidjourneyClick();
     } else if (iconType === 'profile' && onProfileClick) {
       onProfileClick();
+    } else if (iconType === 'settings' && onSettingsClick) {
+      onSettingsClick();
     } else if (iconType === 'twitter') {
       // Play click sound and show flash animation for Twitter
       playClickSound();
@@ -139,8 +141,9 @@ const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick
         <div className="fixed inset-0 bg-white animate-white-overlay pointer-events-none z-50"></div>
       )}
       
-      <div className="flex justify-center items-center py-4 px-4">
-        <div className="flex space-x-2 bg-black p-3 rounded-lg border-2 border-white">
+      <div className="dock-wrapper">
+        <div className="flex justify-center items-center py-4 px-4">
+          <div className="flex space-x-2 bg-black p-3 rounded-lg border-2 border-white">
           {icons.map((icon) => (
             <div key={icon.type} className="relative group">
               <PixelIcon
@@ -157,6 +160,7 @@ const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </div>

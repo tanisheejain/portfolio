@@ -51,3 +51,94 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #ffffff;
 }
+
+/* ===================================
+   SETTINGS CSS CLASSES & VARIABLES
+   =================================== */
+
+/* Root variables with defaults */
+:root {
+  --fg: #d9d9d9;
+  --bg: #0b0b0b;
+  --border: #ffffff;
+}
+
+/* Theme classes (placeholder - extend as needed) */
+[data-theme="pixel"] {
+  /* Pixel Mono theme - default */
+}
+
+[data-theme="iridescent"] {
+  /* Iridescent theme - placeholder */
+}
+
+[data-theme="cyber"] {
+  /* Cyber-glitch theme - placeholder */
+}
+
+/* CRT effects - only show scanlines when crt-on class is present */
+body:not(.crt-on) .scanline,
+body:not(.crt-on) .crt-flicker,
+body:not(.crt-on) .crt-brightness {
+  display: none !important;
+}
+
+/* Side pixels are controlled via conditional rendering in Homepage */
+
+/* Reduced motion - disable all animations when this class is present */
+.reduced-motion * {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* High contrast mode */
+.high-contrast {
+  --fg: #ffffff;
+  --bg: #000000;
+  --border: #ffffff;
+}
+
+/* Font scale */
+html {
+  font-size: calc(16px * var(--font-scale, 1));
+}
+
+.font-s {
+  --font-scale: 0.9;
+}
+
+.font-m {
+  --font-scale: 1;
+}
+
+.font-l {
+  --font-scale: 1.15;
+}
+
+/* Dock size */
+.dock-wrapper {
+  --dock-scale: 1;
+  transform: scale(var(--dock-scale));
+  transform-origin: bottom center;
+}
+
+.dock-s {
+  --dock-scale: 0.9;
+}
+
+.dock-m {
+  --dock-scale: 1;
+}
+
+.dock-l {
+  --dock-scale: 1.15;
+}
+
+/* Window shadow - apply to all windows when data attribute is set */
+html[data-window-shadow="subtle"] .fixed.border-2.bg-black {
+  box-shadow: 0 0 0 1px var(--border), 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+html[data-window-shadow="none"] .fixed.border-2.bg-black {
+  box-shadow: 0 0 0 1px var(--border);
+}

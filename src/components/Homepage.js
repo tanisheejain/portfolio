@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import CRTMonitor from './CRTMonitor';
+import { useSettings } from '../contexts/SettingsContext';
 
 const Homepage = () => {
+  const { settings } = useSettings();
   const [isMuted, setIsMuted] = useState(false);
   const [sparks, setSparks] = useState([]);
   const [typewriterText, setTypewriterText] = useState({ line1: '', line2: '' });
@@ -226,7 +228,7 @@ const Homepage = () => {
       lastScanRef.current = now;
 
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (prefersReduced) return; // skip sweep for reduced motion
+      if (prefersReduced || settings.reducedMotion) return; // skip sweep for reduced motion
 
       const line = document.createElement('div');
       line.className = 'scanline';
@@ -238,12 +240,12 @@ const Homepage = () => {
     };
     window.addEventListener('pixelLoopReset', handler);
     return () => window.removeEventListener('pixelLoopReset', handler);
-  }, []);
+  }, [settings.reducedMotion]);
 
   // Minimal pixel columns with idle animation and proximity burst
   useEffect(() => {
     const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return; // disable bursts completely
+    if (prefersReduced || settings.reducedMotion) return; // disable bursts completely
 
     let lastBurstLeft = 0;
     let lastBurstLeft2 = 0;
@@ -297,7 +299,7 @@ const Homepage = () => {
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [settings.reducedMotion]);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
@@ -400,15 +402,19 @@ const Homepage = () => {
 
   return (
     <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '1250px' }}>
-      {/* Minimal animated pixel columns (homepage only) */}
-      {renderPixelColumn(leftColRef, 'left', 0, 'top')}
-      {renderPixelColumn(leftColRef2, 'left', 16, 'top')}
-      {renderPixelColumn(leftColRef3, 'left', 32, 'top')}
-      {renderPixelColumn(leftColRef4, 'left', 48, 'top')}
-      {renderPixelColumn(rightColRef, 'right', 0, 'bottom')}
-      {renderPixelColumn(rightColRef2, 'right', 16, 'bottom')}
-      {renderPixelColumn(rightColRef3, 'right', 32, 'bottom')}
-      {renderPixelColumn(rightColRef4, 'right', 48, 'bottom')}
+      {/* Minimal animated pixel columns (homepage only) - only show if enabled in settings */}
+      {settings.sidePixels && (
+        <>
+          {renderPixelColumn(leftColRef, 'left', 0, 'top')}
+          {renderPixelColumn(leftColRef2, 'left', 16, 'top')}
+          {renderPixelColumn(leftColRef3, 'left', 32, 'top')}
+          {renderPixelColumn(leftColRef4, 'left', 48, 'top')}
+          {renderPixelColumn(rightColRef, 'right', 0, 'bottom')}
+          {renderPixelColumn(rightColRef2, 'right', 16, 'bottom')}
+          {renderPixelColumn(rightColRef3, 'right', 32, 'bottom')}
+          {renderPixelColumn(rightColRef4, 'right', 48, 'bottom')}
+        </>
+      )}
 
       {/* Mute Toggle Button */}
       <button
