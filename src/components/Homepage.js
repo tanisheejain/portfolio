@@ -242,7 +242,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '800px' }}>
+    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '1050px' }}>
       {/* Minimal animated pixel columns (homepage only) */}
       {renderPixelColumn(leftColRef, 'left', 0, 'top')}
       {renderPixelColumn(leftColRef2, 'left', 16, 'top')}
@@ -276,7 +276,7 @@ const Homepage = () => {
           flexDirection: 'column',
           alignItems: 'center',
           gap: '48px',
-          marginBottom: '160px',
+          marginBottom: '300px',
           boxShadow: '0 0 30px rgba(255, 255, 255, 0.15), 0 0 60px rgba(255, 255, 255, 0.08)'
         }}
       >
