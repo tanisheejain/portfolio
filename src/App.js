@@ -4,6 +4,7 @@ import Homepage from './components/Homepage';
 import BlogWindow from './components/BlogWindow';
 import GalleryWindow from './components/GalleryWindow';
 import MidjourneyWindow from './components/MidjourneyWindow';
+import AboutWindow from './components/AboutWindow';
 import { useWindowManager } from './hooks/useWindowManager';
 import './App.css';
 
@@ -22,13 +23,17 @@ function App() {
     toggleWindow('midjourney');
   };
 
+  const handleProfileClick = () => {
+    toggleWindow('about');
+  };
+
   return (
     <div className="App min-h-screen bg-black text-white font-pixel">
       {/* Homepage with CRT monitors */}
       <Homepage />
       
       {/* Dock at bottom */}
-      <Dock onNotionClick={handleNotionClick} onGalleryClick={handleGalleryClick} onMidjourneyClick={handleMidjourneyClick} />
+      <Dock onNotionClick={handleNotionClick} onGalleryClick={handleGalleryClick} onMidjourneyClick={handleMidjourneyClick} onProfileClick={handleProfileClick} />
       
       {/* Blog Window */}
       {isWindowOpen('blog') && (
@@ -43,6 +48,11 @@ function App() {
       {/* Midjourney Window */}
       {isWindowOpen('midjourney') && (
         <MidjourneyWindow onClose={() => closeWindow('midjourney')} />
+      )}
+      
+      {/* About Window */}
+      {isWindowOpen('about') && (
+        <AboutWindow onClose={() => closeWindow('about')} />
       )}
     </div>
   );
