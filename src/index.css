@@ -69,7 +69,64 @@ body {
 }
 
 [data-theme="iridescent"] {
-  /* Iridescent theme - placeholder */
+  /* Iridescent theme - gradient aesthetic with light blue, pink, and silver */
+  
+  /* Override borders to gradient */
+  --border: linear-gradient(135deg, #87ceeb, #ffb6c1, #c0c0c0);
+  --fg: linear-gradient(135deg, #87ceeb, #ffb6c1, #c0c0c0);
+}
+
+/* Iridescent borders - use gradient */
+[data-theme="iridescent"] .border-white,
+[data-theme="iridescent"] .border-2.border-white,
+[data-theme="iridescent"] .border-b-2.border-white,
+[data-theme="iridescent"] .border-t-2.border-white,
+[data-theme="iridescent"] .border.border-white {
+  border-image: linear-gradient(135deg, #87ceeb, #ffb6c1, #c0c0c0) 1 !important;
+}
+
+/* Iridescent glow effects - projects container */
+[data-theme="iridescent"] div[style*="boxShadow"] {
+  box-shadow: 0 0 30px rgba(135, 206, 235, 0.25), 0 0 60px rgba(255, 182, 193, 0.15) !important;
+}
+
+/* Iridescent window shadows */
+[data-theme="iridescent"] html[data-window-shadow="subtle"] .fixed.border-2.bg-black,
+[data-theme="iridescent"] html[data-window-shadow="none"] .fixed.border-2.bg-black,
+[data-theme="iridescent"] .fixed.border-2.bg-black {
+  box-shadow: 0 0 0 1px rgba(135, 206, 235, 0.5), 0 12px 24px rgba(255, 182, 193, 0.35) !important;
+}
+
+/* Iridescent pixels on homepage */
+[data-theme="iridescent"] [data-pixel] {
+  background: linear-gradient(135deg, rgba(135, 206, 235, 0.6), rgba(255, 182, 193, 0.6), rgba(192, 192, 192, 0.6)) !important;
+}
+
+/* Iridescent scrollbar */
+[data-theme="iridescent"] ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #87ceeb, #ffb6c1, #c0c0c0) !important;
+  border-color: transparent !important;
+}
+
+/* Iridescent text glow */
+[data-theme="iridescent"] {
+  text-shadow: 0 0 10px rgba(135, 206, 235, 0.6), 0 0 15px rgba(255, 182, 193, 0.5);
+}
+
+/* Iridescent hover effects */
+[data-theme="iridescent"] button:hover,
+[data-theme="iridescent"] .cursor-pointer:hover {
+  text-shadow: 0 0 15px rgba(135, 206, 235, 1), 0 0 20px rgba(255, 182, 193, 0.8) !important;
+}
+
+/* Iridescent monitor glow */
+[data-theme="iridescent"] .crt-monitor:hover {
+  box-shadow: 0 0 20px rgba(135, 206, 235, 0.6), 0 0 30px rgba(255, 182, 193, 0.4) !important;
+}
+
+/* Iridescent scanline */
+[data-theme="iridescent"] .scanline {
+  background: linear-gradient(90deg, transparent, rgba(135, 206, 235, 0.3), rgba(255, 182, 193, 0.3), transparent) !important;
 }
 
 [data-theme="cyber"] {
