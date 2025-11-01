@@ -242,7 +242,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh' }}>
+    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '800px' }}>
       {/* Minimal animated pixel columns (homepage only) */}
       {renderPixelColumn(leftColRef, 'left', 0, 'top')}
       {renderPixelColumn(leftColRef2, 'left', 16, 'top')}
@@ -264,20 +264,37 @@ const Homepage = () => {
         </h1>
       </div>
 
-      {/* Custom Layout matching the second image exactly */}
-      <div className="flex flex-col items-center gap-12 max-w-5xl pb-40 mb-20">
-        {/* Top row: 3 monitors */}
-        <div className="flex gap-16">
-          <CRTMonitor project={projects[0]} index={0} />
-          <CRTMonitor project={projects[1]} index={1} />
-          <CRTMonitor project={projects[2]} index={2} />
-        </div>
-        
-        {/* Bottom row: 2 monitors aligned with first */}
-        <div className="flex gap-16">
-          <CRTMonitor project={projects[3]} index={3} />
-          <CRTMonitor project={projects[4]} index={4} />
-          <div className="w-72"></div> {/* Spacer to match layout */}
+      {/* Rounded rectangle container for CRT monitors */}
+      <div 
+        style={{
+          backgroundColor: '#0F0F0F',
+          borderRadius: '40px',
+          padding: '40px 60px',
+          width: '90%',
+          maxWidth: '1400px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '48px',
+          marginBottom: '160px',
+          boxShadow: '0 0 30px rgba(255, 255, 255, 0.15), 0 0 60px rgba(255, 255, 255, 0.08)'
+        }}
+      >
+        {/* Custom Layout matching the second image exactly */}
+        <div className="flex flex-col items-center gap-12">
+          {/* Top row: 3 monitors */}
+          <div className="flex gap-16">
+            <CRTMonitor project={projects[0]} index={0} />
+            <CRTMonitor project={projects[1]} index={1} />
+            <CRTMonitor project={projects[2]} index={2} />
+          </div>
+          
+          {/* Bottom row: 2 monitors aligned with first */}
+          <div className="flex gap-16">
+            <CRTMonitor project={projects[3]} index={3} />
+            <CRTMonitor project={projects[4]} index={4} />
+            <div className="w-72"></div> {/* Spacer to match layout */}
+          </div>
         </div>
       </div>
 
