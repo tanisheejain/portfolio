@@ -257,11 +257,25 @@ const Homepage = () => {
         {isMuted ? '🔇 UNMUTE' : '🔊 MUTE'}
       </button>
 
-      {/* Header */}
-      <div className="text-center mb-16 mt-8">
-        <h1 className="text-4xl mb-4 tracking-wider text-white font-mono">
-          PROJECTS
-        </h1>
+      {/* Hello text above the rectangle */}
+      <div 
+        className="text-center mb-4"
+        style={{
+          color: 'rgba(255, 255, 255, 0.5)',
+          fontFamily: '"Press Start 2P", monospace',
+          fontSize: '72px',
+          letterSpacing: '0.2em',
+          animation: 'helloFloat 8s ease-in-out infinite',
+          imageRendering: 'pixelated',
+          textRendering: 'optimizeSpeed',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '0px'
+        }}
+      >
+        <div>Hello,</div>
+        <div>I'm Tanishee</div>
       </div>
 
       {/* Rounded rectangle container for CRT monitors */}
@@ -277,9 +291,25 @@ const Homepage = () => {
           alignItems: 'center',
           gap: '48px',
           marginBottom: '300px',
+          marginTop: '32px',
           boxShadow: '0 0 30px rgba(255, 255, 255, 0.15), 0 0 60px rgba(255, 255, 255, 0.08)'
         }}
       >
+        {/* Header inside the grey box */}
+        <div className="text-center">
+          <h1 
+            className="text-sm text-white font-mono"
+            style={{
+              letterSpacing: '0.15em',
+              imageRendering: 'pixelated',
+              textRendering: 'optimizeSpeed',
+              fontSize: '14px'
+            }}
+          >
+            PROJECTS
+          </h1>
+        </div>
+
         {/* Custom Layout matching the second image exactly */}
         <div className="flex flex-col items-center gap-12">
           {/* Top row: 3 monitors */}
@@ -331,6 +361,15 @@ const Homepage = () => {
           }
         }
 
+        @keyframes helloFloat {
+          0%, 100% {
+            transform: translateX(-10px);
+          }
+          50% {
+            transform: translateX(10px);
+          }
+        }
+
         @keyframes colDown {
           0% { transform: translateY(0); }
           100% { transform: translateY(var(--loop-distance)); }
@@ -343,6 +382,9 @@ const Homepage = () => {
         @media (prefers-reduced-motion: reduce) {
           [style*='animation: colDown'], [style*='animation: colUp'] {
             animation-duration: 24s !important;
+          }
+          [style*='animation: helloFloat'] {
+            animation: none !important;
           }
         }
 
