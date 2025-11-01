@@ -4,15 +4,21 @@ import CRTMonitor from './CRTMonitor';
 const Homepage = () => {
   const [isMuted, setIsMuted] = useState(false);
   const [sparks, setSparks] = useState([]);
+  const [typewriterText, setTypewriterText] = useState({ line1: '', line2: '' });
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
   const leftColRef = React.useRef(null);
   const leftColRef2 = React.useRef(null);
+  const leftColRef3 = React.useRef(null);
+  const leftColRef4 = React.useRef(null);
   const rightColRef = React.useRef(null);
   const rightColRef2 = React.useRef(null);
+  const rightColRef3 = React.useRef(null);
+  const rightColRef4 = React.useRef(null);
   const lastScanRef = React.useRef(0);
 
-  // Initialize audio context immediately
+  // Initialize audio context immediately and unlock it for autoplay
   useEffect(() => {
-    const initAudio = () => {
+    const initAudio = async () => {
       try {
         // Create a global audio context
         if (!window.globalAudioContext) {
@@ -20,6 +26,25 @@ const Homepage = () => {
         }
         // Set global mute state
         window.isAudioMuted = isMuted;
+        
+        // Try to unlock audio context immediately for autoplay
+        if (window.globalAudioContext.state === 'suspended') {
+          await window.globalAudioContext.resume();
+        }
+        
+        // Play a very brief silent sound to unlock the audio context
+        // This helps bypass autoplay restrictions
+        try {
+          const oscillator = window.globalAudioContext.createOscillator();
+          const gainNode = window.globalAudioContext.createGain();
+          gainNode.gain.setValueAtTime(0, window.globalAudioContext.currentTime);
+          oscillator.connect(gainNode);
+          gainNode.connect(window.globalAudioContext.destination);
+          oscillator.start();
+          oscillator.stop(window.globalAudioContext.currentTime + 0.001);
+        } catch (e) {
+          // Silent unlock failed, but continue
+        }
       } catch (e) {
         console.log('Audio context initialization failed:', e);
       }
@@ -58,6 +83,130 @@ const Homepage = () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
+  const playTypingSound = React.useCallback(async () => {
+    if (window.isAudioMuted) return;
+    try {
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      // Ensure audio context is resumed (needed for browser autoplay restrictions)
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+      
+      // Wait for audio context to be running
+      if (audioContext.state !== 'running') {
+        return; // Skip if still not running
+      }
+      
+      // Create a subtle typing sound using oscillator
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Random frequency between 800-1200 Hz for variety
+      const frequency = 800 + Math.random() * 400;
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      oscillator.type = 'square';
+      
+      // Quick, subtle sound
+      gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.05);
+    } catch (e) {
+      // Audio not available - silently fail
+    }
+  }, []);
+
+  // Typewriter animation effect
+  useEffect(() => {
+    // Try to unlock audio context for typing sounds
+    const unlockAudioForTyping = async () => {
+      try {
+        if (!window.globalAudioContext) {
+          window.globalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (window.globalAudioContext.state === 'suspended') {
+          await window.globalAudioContext.resume();
+        }
+        
+        // Play a silent sound to unlock audio if needed
+        if (window.globalAudioContext.state === 'running') {
+          const osc = window.globalAudioContext.createOscillator();
+          const gain = window.globalAudioContext.createGain();
+          gain.gain.setValueAtTime(0, window.globalAudioContext.currentTime);
+          osc.connect(gain);
+          gain.connect(window.globalAudioContext.destination);
+          osc.start();
+          osc.stop(window.globalAudioContext.currentTime + 0.001);
+        }
+      } catch (e) {
+        // Audio unlock failed, continue anyway
+      }
+    };
+
+    unlockAudioForTyping();
+
+    const fullText1 = "Hello,";
+    const fullText2 = "I'm Tanishee";
+    let currentIndex1 = 0;
+    let currentIndex2 = 0;
+    let line1Complete = false;
+    let pauseAfterLine1 = 0;
+    let line2Complete = false;
+
+    // Small delay to ensure audio context is ready
+    let intervalId = null;
+    const typeTimeout = setTimeout(() => {
+      intervalId = setInterval(() => {
+        if (!line1Complete) {
+          if (currentIndex1 < fullText1.length) {
+            setTypewriterText(prev => ({
+              ...prev,
+              line1: fullText1.substring(0, currentIndex1 + 1)
+            }));
+            playTypingSound();
+            currentIndex1++;
+          } else {
+            // Line 1 complete, pause before starting line 2
+            line1Complete = true;
+            pauseAfterLine1 = 3; // Wait 3 intervals (300ms at 100ms interval)
+          }
+        } else if (pauseAfterLine1 > 0) {
+          // Waiting between lines
+          pauseAfterLine1--;
+        } else if (!line2Complete) {
+          // Start typing line 2
+          if (currentIndex2 < fullText2.length) {
+            setTypewriterText(prev => ({
+              ...prev,
+              line2: fullText2.substring(0, currentIndex2 + 1)
+            }));
+            playTypingSound();
+            currentIndex2++;
+          } else {
+            // Both lines complete
+            line2Complete = true;
+            if (intervalId) clearInterval(intervalId);
+            setIsTypingComplete(true);
+          }
+        }
+      }, 100); // Typing speed: 100ms per character
+    }, 200); // Initial delay to ensure audio context is ready
+
+    return () => {
+      clearTimeout(typeTimeout);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [playTypingSound]);
 
   // Dispatch a CustomEvent on each pixel column loop reset
   useEffect(() => {
@@ -98,8 +247,12 @@ const Homepage = () => {
 
     let lastBurstLeft = 0;
     let lastBurstLeft2 = 0;
+    let lastBurstLeft3 = 0;
+    let lastBurstLeft4 = 0;
     let lastBurstRight = 0;
     let lastBurstRight2 = 0;
+    let lastBurstRight3 = 0;
+    let lastBurstRight4 = 0;
     const BURST_THROTTLE_MS = 200;
     const NEAR_PX = 120;
 
@@ -134,8 +287,12 @@ const Homepage = () => {
 
       triggerBurst(leftColRef, lastBurstLeft, (t) => (lastBurstLeft = t));
       triggerBurst(leftColRef2, lastBurstLeft2, (t) => (lastBurstLeft2 = t));
+      triggerBurst(leftColRef3, lastBurstLeft3, (t) => (lastBurstLeft3 = t));
+      triggerBurst(leftColRef4, lastBurstLeft4, (t) => (lastBurstLeft4 = t));
       triggerBurst(rightColRef, lastBurstRight, (t) => (lastBurstRight = t));
       triggerBurst(rightColRef2, lastBurstRight2, (t) => (lastBurstRight2 = t));
+      triggerBurst(rightColRef3, lastBurstRight3, (t) => (lastBurstRight3 = t));
+      triggerBurst(rightColRef4, lastBurstRight4, (t) => (lastBurstRight4 = t));
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -184,7 +341,7 @@ const Homepage = () => {
     const stack = (keyPrefix) => (
       <div key={keyPrefix} style={{ display: 'flex', flexDirection: 'column', gap: `${GAP}px` }}>
         {Array.from({ length: COUNT }).map((_, i) => (
-          <div key={`${keyPrefix}-${i}`} data-pixel style={{ width: `${SIZE}px`, height: `${SIZE}px`, background: '#fff' }} />
+          <div key={`${keyPrefix}-${i}`} data-pixel style={{ width: `${SIZE}px`, height: `${SIZE}px`, background: 'rgba(255, 255, 255, 0.5)' }} />
         ))}
       </div>
     );
@@ -242,12 +399,16 @@ const Homepage = () => {
   };
 
   return (
-    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '1050px' }}>
+    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '1250px' }}>
       {/* Minimal animated pixel columns (homepage only) */}
       {renderPixelColumn(leftColRef, 'left', 0, 'top')}
       {renderPixelColumn(leftColRef2, 'left', 16, 'top')}
+      {renderPixelColumn(leftColRef3, 'left', 32, 'top')}
+      {renderPixelColumn(leftColRef4, 'left', 48, 'top')}
       {renderPixelColumn(rightColRef, 'right', 0, 'bottom')}
       {renderPixelColumn(rightColRef2, 'right', 16, 'bottom')}
+      {renderPixelColumn(rightColRef3, 'right', 32, 'bottom')}
+      {renderPixelColumn(rightColRef4, 'right', 48, 'bottom')}
 
       {/* Mute Toggle Button */}
       <button
@@ -265,7 +426,7 @@ const Homepage = () => {
           fontFamily: '"Press Start 2P", monospace',
           fontSize: '72px',
           letterSpacing: '0.2em',
-          animation: 'helloFloat 8s ease-in-out infinite',
+          animation: isTypingComplete ? 'helloFloat 8s ease-in-out infinite' : 'none',
           imageRendering: 'pixelated',
           textRendering: 'optimizeSpeed',
           display: 'flex',
@@ -274,8 +435,14 @@ const Homepage = () => {
           gap: '0px'
         }}
       >
-        <div>Hello,</div>
-        <div>I'm Tanishee</div>
+        <div>
+          {typewriterText.line1}
+          {!isTypingComplete && typewriterText.line1.length < "Hello,".length && <span style={{ opacity: 0.7 }}>|</span>}
+        </div>
+        <div>
+          {typewriterText.line2}
+          {!isTypingComplete && typewriterText.line2.length < "I'm Tanishee".length && typewriterText.line1 === "Hello," && <span style={{ opacity: 0.7 }}>|</span>}
+        </div>
       </div>
 
       {/* Rounded rectangle container for CRT monitors */}
@@ -290,7 +457,7 @@ const Homepage = () => {
           flexDirection: 'column',
           alignItems: 'center',
           gap: '48px',
-          marginBottom: '300px',
+          marginBottom: '500px',
           marginTop: '32px',
           boxShadow: '0 0 30px rgba(255, 255, 255, 0.15), 0 0 60px rgba(255, 255, 255, 0.08)'
         }}
