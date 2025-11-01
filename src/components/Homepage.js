@@ -55,6 +55,27 @@ const Homepage = () => {
     initAudio();
   }, [isMuted]);
 
+  // Unlock audio on first user interaction
+  useEffect(() => {
+    const unlockAudio = async () => {
+      if (window.globalAudioContext && window.globalAudioContext.state === 'suspended') {
+        try {
+          await window.globalAudioContext.resume();
+        } catch (e) {
+          console.log('Audio unlock failed:', e);
+        }
+      }
+    };
+
+    const handleClick = () => {
+      unlockAudio();
+      document.removeEventListener('click', handleClick);
+    };
+
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
+
   // Cursor spark effect
   useEffect(() => {
     const sparkChars = ['*', '+', '.', 'x'];
@@ -302,8 +323,10 @@ const Homepage = () => {
   }, [settings.reducedMotion]);
 
   const toggleMute = () => {
-    setIsMuted(!isMuted);
-    window.isAudioMuted = !isMuted;
+    const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+    window.isAudioMuted = newMutedState;
+    console.log('Audio muted:', newMutedState);
   };
 
   // Project data matching the exact layout from your image

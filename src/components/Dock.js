@@ -5,53 +5,71 @@ const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick
   const [clickedIcon, setClickedIcon] = useState(null);
   const [showFlash, setShowFlash] = useState(false);
 
-  const playSound = (soundType) => {
+  const playSound = async (soundType) => {
     // Check if audio is muted
-    if (window.isAudioMuted) return;
-    
-    // Use global audio context
-    let audioContext = window.globalAudioContext;
-    if (!audioContext) {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      window.globalAudioContext = audioContext;
+    if (window.isAudioMuted) {
+      console.log('Audio is muted, skipping sound:', soundType);
+      return;
     }
     
-    let frequency, duration, type;
-    
-    switch (soundType) {
-      case 'hover':
-        frequency = 800;
-        duration = 0.1;
-        type = 'sine';
-        break;
-      case 'click':
-        frequency = 1000;
-        duration = 0.15;
-        type = 'square';
-        break;
-      case 'boot':
-        frequency = 600;
-        duration = 0.3;
-        type = 'triangle';
-        break;
-      default:
-        return;
-    }
+    try {
+      console.log('Playing sound:', soundType);
+      // Use global audio context
+      let audioContext = window.globalAudioContext;
+      if (!audioContext) {
+        console.log('Creating new audio context');
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        window.globalAudioContext = audioContext;
+      }
+      
+      console.log('Audio context state:', audioContext.state);
+      
+      // Resume if suspended
+      if (audioContext.state === 'suspended') {
+        console.log('Resuming audio context');
+        await audioContext.resume();
+      }
+      
+      let frequency, duration, type;
+      
+      switch (soundType) {
+        case 'hover':
+          frequency = 800;
+          duration = 0.1;
+          type = 'sine';
+          break;
+        case 'click':
+          frequency = 1000;
+          duration = 0.15;
+          type = 'square';
+          break;
+        case 'boot':
+          frequency = 600;
+          duration = 0.3;
+          type = 'triangle';
+          break;
+        default:
+          return;
+      }
 
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-    oscillator.type = type;
-    
-    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-    
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + duration);
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+      oscillator.type = type;
+      
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + duration);
+      console.log('Sound started successfully');
+    } catch (e) {
+      console.error('Play sound error:', e);
+    }
   };
 
   const playClickSound = async () => {
