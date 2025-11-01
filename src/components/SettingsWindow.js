@@ -62,7 +62,7 @@ const SettingsWindow = ({ onClose }) => {
   return (
     <div
       ref={windowRef}
-      className="fixed bg-black border-2 border-white z-50 select-none"
+      className="window-container fixed bg-black border-2 border-white z-50 select-none"
       style={containerStyle}
     >
       {/* Window Header */}
@@ -114,7 +114,7 @@ const SettingsWindow = ({ onClose }) => {
 
       {/* Window Content */}
       <div
-        className="p-6 h-full overflow-y-auto bg-black text-white border-b-2 border-white"
+        className="window-content p-6 h-full overflow-y-auto bg-black text-white border-b-2 border-white"
         style={{ display: isMinimized ? 'none' : 'block' }}
       >
         <div className="mb-6">

@@ -203,7 +203,7 @@ const GalleryWindow = ({ onClose }) => {
       
       <div
         ref={windowRef}
-        className="fixed bg-black border-2 border-white z-50 select-none"
+        className="window-container fixed bg-black border-2 border-white z-50 select-none"
         style={containerStyle}
       >
         {/* Window Header */}
@@ -240,7 +240,7 @@ const GalleryWindow = ({ onClose }) => {
         </div>
 
         {/* Window Content */}
-        <div className="p-4 h-full overflow-y-auto bg-black text-white border-b-2 border-white" style={{ display: isMinimized ? 'none' : 'block' }}>
+        <div className="window-content p-4 h-full overflow-y-auto bg-black text-white border-b-2 border-white" style={{ display: isMinimized ? 'none' : 'block' }}>
           {currentGallery === null ? (
             <>
               {/* Header Content */}

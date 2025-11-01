@@ -125,7 +125,7 @@ const BlogWindow = ({ onClose }) => {
   return (
     <div
       ref={windowRef}
-      className="fixed bg-black border-2 border-white z-50 select-none"
+      className="window-container fixed bg-black border-2 border-white z-50 select-none"
       style={containerStyle}
     >
       {/* Window Header */}
@@ -162,7 +162,7 @@ const BlogWindow = ({ onClose }) => {
       </div>
 
       {/* Window Content */}
-      <div className="p-4 h-full overflow-y-auto bg-black text-white border-b-2 border-white" style={{ display: isMinimized ? 'none' : 'block' }}>
+      <div className="window-content p-4 h-full overflow-y-auto bg-black text-white border-b-2 border-white" style={{ display: isMinimized ? 'none' : 'block' }}>
         {/* Header Content */}
         <div className="mb-6">
           <h1 className="text-2xl font-mono mb-4 tracking-wider">Why do I write?</h1>

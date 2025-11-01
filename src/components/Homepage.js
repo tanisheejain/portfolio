@@ -387,7 +387,7 @@ const Homepage = () => {
     // For LEFT: marquee loop by duplicating stacks inside an animated wrapper
     if (direction === 'left') {
       return (
-        <div ref={ref} style={baseStyle}>
+        <div ref={ref} className="side-pixel-column" style={baseStyle}>
           <div
             style={{
               display: 'flex',
@@ -406,7 +406,7 @@ const Homepage = () => {
 
     // RIGHT: marquee loop upward using duplicated stacks; start hugging bottom
     return (
-      <div ref={ref} style={{ ...baseStyle, alignItems: 'flex-end' }}>
+      <div ref={ref} className="side-pixel-column" style={{ ...baseStyle, alignItems: 'flex-end' }}>
         <div
           style={{
             display: 'flex',
@@ -424,7 +424,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="bg-black flex flex-col items-center p-8 relative" style={{ minHeight: '100vh', paddingBottom: '1250px' }}>
+    <div className="bg-black flex flex-col items-center p-4 md:p-8 relative homepage-wrapper" style={{ minHeight: '100vh', paddingBottom: '1250px' }}>
       {/* Minimal animated pixel columns (homepage only) - only show if enabled in settings */}
       {settings.sidePixels && (
         <>
@@ -442,14 +442,14 @@ const Homepage = () => {
       {/* Mute Toggle Button */}
       <button
         onClick={toggleMute}
-        className="absolute top-8 right-8 text-white font-mono text-xs cursor-pointer hover:text-gray-400 transition-colors"
+        className="mute-button absolute top-8 right-8 text-white font-mono text-xs cursor-pointer hover:text-gray-400 transition-colors"
       >
         {isMuted ? '🔇 UNMUTE' : '🔊 MUTE'}
       </button>
 
       {/* Hello text above the rectangle */}
       <div 
-        className="text-center mb-4"
+        className="homepage-title text-center mb-4"
         style={{
           color: 'rgba(255, 255, 255, 0.5)',
           fontFamily: '"Press Start 2P", monospace',
@@ -476,6 +476,7 @@ const Homepage = () => {
 
       {/* Rounded rectangle container for CRT monitors */}
       <div 
+        className="projects-container"
         style={{
           backgroundColor: '#0F0F0F',
           borderRadius: '40px',
@@ -494,7 +495,7 @@ const Homepage = () => {
         {/* Header inside the grey box */}
         <div className="text-center">
           <h1 
-            className="text-sm text-white font-mono"
+            className="projects-heading text-sm text-white font-mono"
             style={{
               letterSpacing: '0.15em',
               imageRendering: 'pixelated',
@@ -507,19 +508,19 @@ const Homepage = () => {
         </div>
 
         {/* Custom Layout matching the second image exactly */}
-        <div className="flex flex-col items-center gap-12">
+        <div className="projects-grid flex flex-col items-center gap-12">
           {/* Top row: 3 monitors */}
-          <div className="flex gap-16">
+          <div className="project-row flex gap-16">
             <CRTMonitor project={projects[0]} index={0} />
             <CRTMonitor project={projects[1]} index={1} />
             <CRTMonitor project={projects[2]} index={2} />
           </div>
           
           {/* Bottom row: 2 monitors aligned with first */}
-          <div className="flex gap-16">
+          <div className="project-row flex gap-16">
             <CRTMonitor project={projects[3]} index={3} />
             <CRTMonitor project={projects[4]} index={4} />
-            <div className="w-72"></div> {/* Spacer to match layout */}
+            <div className="project-spacer w-72"></div> {/* Spacer to match layout */}
           </div>
         </div>
       </div>

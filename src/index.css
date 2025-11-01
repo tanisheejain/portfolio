@@ -258,3 +258,134 @@ html[data-window-shadow="subtle"] .fixed.border-2.bg-black {
 html[data-window-shadow="none"] .fixed.border-2.bg-black {
   box-shadow: 0 0 0 1px var(--border);
 }
+
+/* ===================================
+   RESPONSIVE STYLES
+   =================================== */
+
+/* Mobile styles (below 768px) */
+@media (max-width: 767px) {
+  /* Homepage wrapper - more bottom padding on mobile */
+  .homepage-wrapper {
+    padding-bottom: 600px !important;
+  }
+  
+  /* Homepage title - smaller on mobile */
+  .homepage-title {
+    font-size: 24px !important;
+    letter-spacing: 0.05em !important;
+  }
+  
+  /* Projects container - less padding and margin on mobile */
+  .projects-container {
+    padding: 20px 30px !important;
+    border-radius: 20px !important;
+    gap: 24px !important;
+    margin-bottom: 200px !important;
+    margin-top: 16px !important;
+  }
+  
+  /* Projects heading */
+  .projects-heading {
+    font-size: 10px !important;
+  }
+  
+  /* Projects grid - stack vertically on mobile */
+  .projects-grid {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+  
+  /* Project row - single column on mobile */
+  .project-row {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+  
+  /* CRT monitor - smaller on mobile */
+  .crt-monitor-container {
+    width: 100% !important;
+    max-width: 280px !important;
+    height: auto !important;
+  }
+  
+  /* Dock - smaller icons on mobile */
+  .dock-wrapper {
+    transform: scale(0.85) !important;
+  }
+  
+  /* Mute button - reposition on mobile */
+  .mute-button {
+    top: 16px !important;
+    right: 16px !important;
+    font-size: 8px !important;
+  }
+  
+  /* Hide spacer on mobile */
+  .project-spacer {
+    display: none !important;
+  }
+  
+  /* Hide side pixels on mobile to avoid interfering with content */
+  .side-pixel-column {
+    display: none !important;
+  }
+}
+
+/* Tablet styles (768px to 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Homepage title - medium size on tablet */
+  .homepage-title {
+    font-size: 48px !important;
+    letter-spacing: 0.1em !important;
+  }
+  
+  /* Projects container - medium padding on tablet */
+  .projects-container {
+    padding: 30px 45px !important;
+    gap: 36px !important;
+    margin-bottom: 300px !important;
+  }
+  
+  /* Projects grid - 2 columns max on tablet */
+  .project-row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 32px !important;
+  }
+}
+
+/* Window responsive styles */
+@media (max-width: 767px) {
+  /* Windows - full width on mobile - override inline styles with more specificity */
+  div.window-container {
+    width: 95vw !important;
+    max-width: none !important;
+  }
+  
+  div.window-container[style] {
+    left: 2.5vw !important;
+    top: 20px !important;
+    max-height: 80vh !important;
+  }
+  
+  /* Window header - smaller text on mobile */
+  .window-header {
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+  }
+  
+  /* Window buttons - smaller on mobile */
+  .window-btn {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 8px !important;
+    line-height: 8px !important;
+  }
+  
+  /* Window content - adjust padding on mobile */
+  .window-content {
+    padding: 12px !important;
+    font-size: 8px !important;
+  }
+}

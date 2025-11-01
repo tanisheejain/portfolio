@@ -239,7 +239,7 @@ const CRTMonitor = ({ project, index }) => {
   };
 
   return (
-    <div className="relative group">
+    <div className="crt-monitor-container relative group">
       {/* Just the image without any monitor frame */}
       <div 
         className="w-72 h-72 cursor-pointer transition-all duration-300 relative"
