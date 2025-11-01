@@ -63,9 +63,9 @@ body {
   --border: #ffffff;
 }
 
-/* Theme classes (placeholder - extend as needed) */
+/* Theme classes */
 [data-theme="pixel"] {
-  /* Pixel Mono theme - default */
+  /* Pixel Mono theme - default, no changes */
 }
 
 [data-theme="iridescent"] {
@@ -73,7 +73,61 @@ body {
 }
 
 [data-theme="cyber"] {
-  /* Cyber-glitch theme - placeholder */
+  /* Cyber-glitch theme - neon green aesthetic */
+  
+  /* Override borders to neon green */
+  --border: #00ff00;
+  --fg: #00ff00;
+  
+  /* Change all white borders to neon green */
+  /* Windows, dock, buttons, etc. */
+}
+
+[data-theme="cyber"] .border-white,
+[data-theme="cyber"] .border-2.border-white,
+[data-theme="cyber"] .border-b-2.border-white,
+[data-theme="cyber"] .border-t-2.border-white,
+[data-theme="cyber"] .border.border-white {
+  border-color: #00ff00 !important;
+}
+
+/* Neon green glow effects for cyber theme - projects container */
+[data-theme="cyber"] div[style*="boxShadow"] {
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.15), 0 0 60px rgba(0, 255, 0, 0.08) !important;
+}
+
+/* Neon green window shadows - override window shadow settings */
+[data-theme="cyber"] html[data-window-shadow="subtle"] .fixed.border-2.bg-black,
+[data-theme="cyber"] html[data-window-shadow="none"] .fixed.border-2.bg-black,
+[data-theme="cyber"] .fixed.border-2.bg-black {
+  box-shadow: 0 0 0 1px #00ff00, 0 12px 24px rgba(0, 255, 0, 0.35) !important;
+}
+
+/* Neon green pixels on homepage */
+[data-theme="cyber"] [data-pixel] {
+  background: rgba(0, 255, 0, 0.5) !important;
+}
+
+/* Neon green scrollbar for cyber theme */
+[data-theme="cyber"] ::-webkit-scrollbar-thumb {
+  background: #00ff00 !important;
+  border-color: #00ff00 !important;
+}
+
+/* Neon green text glow for cyber theme */
+[data-theme="cyber"] {
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+/* Neon green hover effects */
+[data-theme="cyber"] button:hover,
+[data-theme="cyber"] .cursor-pointer:hover {
+  text-shadow: 0 0 15px rgba(0, 255, 0, 1) !important;
+}
+
+/* Neon green monitor glow */
+[data-theme="cyber"] .crt-monitor:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5) !important;
 }
 
 /* CRT effects - only show scanlines when crt-on class is present */
@@ -81,6 +135,11 @@ body:not(.crt-on) .scanline,
 body:not(.crt-on) .crt-flicker,
 body:not(.crt-on) .crt-brightness {
   display: none !important;
+}
+
+/* Neon green scanline for cyber theme */
+[data-theme="cyber"] .scanline {
+  background: rgba(0, 255, 0, 0.15) !important;
 }
 
 /* Side pixels are controlled via conditional rendering in Homepage */

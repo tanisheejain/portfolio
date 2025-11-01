@@ -6,8 +6,15 @@ const Dock = ({ onNotionClick, onGalleryClick, onMidjourneyClick, onProfileClick
   const [showFlash, setShowFlash] = useState(false);
 
   const playSound = (soundType) => {
-    // Create audio context for retro sounds
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    // Check if audio is muted
+    if (window.isAudioMuted) return;
+    
+    // Use global audio context
+    let audioContext = window.globalAudioContext;
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      window.globalAudioContext = audioContext;
+    }
     
     let frequency, duration, type;
     
